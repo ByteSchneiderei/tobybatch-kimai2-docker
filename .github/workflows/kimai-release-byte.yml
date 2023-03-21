@@ -8,7 +8,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env: 
-      DOCKERHUB_REGISTRY: byteschneiderei/tobybatch-kimai2-docker
+      DOCKERHUB_REGISTRY: byteschneiderei/tobybatch-kimai2
     steps:
 
       - name: Set vars from payload
@@ -49,9 +49,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-            # platforms:
-            # linux/arm64/v8
-            # linux/amd64
           target: prod
           build-args: |
             KIMAI=${{steps.remote_version.outputs.version}}
