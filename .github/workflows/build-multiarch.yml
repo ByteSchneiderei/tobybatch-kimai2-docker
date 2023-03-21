@@ -1,5 +1,5 @@
 # act -j build -W ./.github/workflows/build-multiarch.yml --secret-file  .dockerhub.secrets
-name: 'Build multiarch'
+name: 'Build multiarch [BYTE]'
 
 on:
   workflow_dispatch:
@@ -11,7 +11,9 @@ jobs:
     strategy:
       matrix:
         type: [dev,prod]
-        server: [fpm,apache]
+        server: [fpm]
+    env: 
+      DOCKERHUB_REGISTRY: byteschneiderei/tobybatch-kimai2-docker
     runs-on: ubuntu-latest
     steps:
 
@@ -35,7 +37,7 @@ jobs:
         run: echo "::set-output name=version::$(lastversion https://github.com/kevinpapst/kimai2 --only '~^1\.')"
 
       - name: build ${{ matrix.server }} ${{ matrix.type }}
-        run: echo kimai/kimai2:${{ matrix.type }}-${{ matrix.server }}
+        run: echo ${{ env.DOCKERHUB_REGISTRY }}:${{ matrix.type }}-${{ matrix.server }}
 
       - name: Build
         uses: docker/build-push-action@v2
@@ -48,12 +50,14 @@ jobs:
           target: ${{ matrix.type }}
           platforms: linux/arm64,linux/amd64,linux/arm/v8,linux/arm/v7 #,linux/arm/v6
           tags: |
-            kimai/kimai2:${{ matrix.server }}-${{ matrix.type }}
-            kimai/kimai2:${{ matrix.server }}-${{steps.remote_version.outputs.version}}-${{ matrix.type }}
+            ${{ env.DOCKERHUB_REGISTRY }}:${{ matrix.server }}-${{ matrix.type }}
+            ${{ env.DOCKERHUB_REGISTRY }}:${{ matrix.server }}-${{steps.remote_version.outputs.version}}-${{ matrix.type }}
           push: true
 
   tag:
     runs-on: ubuntu-latest
+    env: 
+      DOCKERHUB_REGISTRY: byteschneiderei/tobybatch-kimai2-docker
     steps:
 
       - name: Login to DockerHub
@@ -64,42 +68,25 @@ jobs:
 
       - name: Pull images
         run: |
-          docker pull kimai/kimai2:fpm
-          docker pull kimai/kimai2:fpm-dev
-          docker pull kimai/kimai2:apache
-          docker pull kimai/kimai2:apache-dev
+          docker pull ${{ env.DOCKERHUB_REGISTRY }}:fpm
+          docker pull ${{ env.DOCKERHUB_REGISTRY }}:fpm-dev
 
       - name: Tag fpm
         run: |
-          docker tag kimai/kimai2:fpm kimai/kimai2:fpm-prod
-          docker push kimai/kimai2:fpm
+          docker tag ${{ env.DOCKERHUB_REGISTRY }}:fpm ${{ env.DOCKERHUB_REGISTRY }}:fpm-prod
+          docker push ${{ env.DOCKERHUB_REGISTRY }}:fpm
 
       - name: Tag fpm latest
         run: |
-          docker tag kimai/kimai2:fpm kimai/kimai2:fpm-latest
-          docker push kimai/kimai2:fpm-latest
+          docker tag ${{ env.DOCKERHUB_REGISTRY }}:fpm ${{ env.DOCKERHUB_REGISTRY }}:fpm-latest
+          docker push ${{ env.DOCKERHUB_REGISTRY }}:fpm-latest
 
       - name: Tag latest
         run: |
-          docker tag kimai/kimai2:fpm kimai/kimai2:latest
-          docker push kimai/kimai2:latest
+          docker tag ${{ env.DOCKERHUB_REGISTRY }}:fpm ${{ env.DOCKERHUB_REGISTRY }}2:latest
+          docker push ${{ env.DOCKERHUB_REGISTRY }}:latest
 
       - name: Tag prod
         run: |
-          docker tag kimai/kimai2:fpm kimai/kimai2:prod
-          docker push kimai/kimai2:prod
-
-      - name: Tag apache
-        run: |
-          docker tag kimai/kimai2:apache kimai/kimai2:apache-prod
-          docker push kimai/kimai2:apache
-
-      - name: Tag apache latest
-        run: |
-          docker tag kimai/kimai2:apache kimai/kimai2:apache-latest
-          docker push kimai/kimai2:apache-latest
-
-      - name: Tag dev
-        run: |
-          docker tag kimai/kimai2:apache-dev kimai/kimai2:dev
-          docker push kimai/kimai2:dev
+          docker tag ${{ env.DOCKERHUB_REGISTRY }}:fpm ${{ env.DOCKERHUB_REGISTRY }}:prod
+          docker push ${{ env.DOCKERHUB_REGISTRY }}:prod
