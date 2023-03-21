@@ -2,7 +2,9 @@
 
 We provide a set of docker images for the [Kimai v2](https://github.com/kevinpapst/kimai2) project.
 
-The built images are available from [Kimai v2](https://hub.docker.com/r/kimai/kimai2) at Docker Hub.
+~~The built images are available from [Kimai v2](https://hub.docker.com/r/kimai/kimai2) at Docker Hub.~~
+
+The built images from ByteSchneiderei are available from [Kimai v1.x](https://hub.docker.com/r/byteschneiderei/tobybatch-kimai2) at Docker Hub.
 
 ## Deving and Contributing
 
