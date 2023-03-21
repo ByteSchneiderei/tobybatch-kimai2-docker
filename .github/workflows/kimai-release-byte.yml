@@ -1,9 +1,8 @@
 name: 'Build release'
 
 on:
-  workflow_dispatch:
-  # repository_dispatch:
-    # types: [kimai_release]
+  push:
+    branches: main
 
 jobs:
   build:
