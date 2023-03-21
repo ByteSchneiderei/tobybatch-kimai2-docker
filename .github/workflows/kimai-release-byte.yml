@@ -8,6 +8,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env: 
+      DOCKERHUB_REGISTRY: byteschneiderei/tobybatch-kimai2-docker
     steps:
 
       - name: Set vars from payload
@@ -37,17 +39,14 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-            # platforms:
-            # linux/arm64/v8
-            # linux/amd64
           target: dev
           build-args: |
             KIMAI=${{steps.remote_version.outputs.version}}
             TIMEZONE=Europe/London
             BASE=fpm
           tags: |
-            kimai/kimai2:fpm-${{steps.remote_version.outputs.version}}-dev
-            kimai/kimai2:fpm-dev
+            ${{ env.DOCKERHUB_REGISTRY }}:fpm-${{steps.remote_version.outputs.version}}-dev
+            ${{ env.DOCKERHUB_REGISTRY }}:fpm-dev
           push: true
 
       - name: Build and push FPM Prod
@@ -63,45 +62,10 @@ jobs:
             TIMEZONE=Europe/London
             BASE=fpm
           tags: |
-            kimai/kimai2:fpm-${{steps.remote_version.outputs.version}}-prod
-            kimai/kimai2:fpm-latest
-            kimai/kimai2:fpm
-            kimai/kimai2:latest
-          push: true
-
-      - name: Build and push Apache Dev
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-            # platforms:
-            # linux/arm64/v8
-            # linux/amd64
-          target: dev
-          build-args: |
-            KIMAI=${{steps.remote_version.outputs.version}}
-            TIMEZONE=Europe/London
-            BASE=apache
-          tags: |
-            kimai/kimai2:apache-${{steps.remote_version.outputs.version}}-dev
-            kimai/kimai2:apache-dev
-          push: true
-
-      - name: Build and push Apache Prod
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-            # platforms:
-            # linux/arm64/v8
-            # linux/amd64
-          target: prod
-          build-args: |
-            KIMAI=${{steps.remote_version.outputs.version}}
-            TIMEZONE=Europe/London
-            BASE=apache
-          tags: |
-            kimai/kimai2:apache-${{steps.remote_version.outputs.version}}-prod
-            kimai/kimai2:apache-latest
-            kimai/kimai2:apache
+            ${{ env.DOCKERHUB_REGISTRY }}:fpm-${{steps.remote_version.outputs.version}}-prod
+            ${{ env.DOCKERHUB_REGISTRY }}:fpm-latest
+            ${{ env.DOCKERHUB_REGISTRY }}:fpm
+            ${{ env.DOCKERHUB_REGISTRY }}:latest
           push: true
 
       - name: Image digest
