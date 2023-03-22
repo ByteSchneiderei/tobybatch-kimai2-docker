@@ -94,5 +94,6 @@ function handleStartup() {
 }
 
 config
+handleStartup
 /service.sh
 exit
