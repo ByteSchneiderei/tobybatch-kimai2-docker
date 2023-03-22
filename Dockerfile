@@ -258,6 +258,8 @@ ENV COMPOSER_MEMORY_LIMIT=-1
 # If this set then the image will start, run a self test and then exit. It's used for the release process
 ENV TEST_AND_EXIT=
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV USER_ID=1000
+ENV GROUP_ID=1000
 
 VOLUME [ "/opt/kimai/var" ]
 
@@ -291,7 +293,6 @@ RUN \
 ENV APP_ENV=dev
 ENV DATABASE_URL=
 ENV memory_limit=256
-USER www-data
 
 # production build
 FROM base AS prod
@@ -306,6 +307,11 @@ RUN \
     composer --no-ansi require --working-dir=/opt/kimai laminas/laminas-ldap && \
     cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini && \
     sed -i "s/expose_php = On/expose_php = Off/g" /usr/local/etc/php/php.ini && \
+    sed -i "s/;opcache.enable=1/opcache.enable=1/g" /usr/local/etc/php/php.ini && \
+    sed -i "s/;opcache.memory_consumption=128/opcache.memory_consumption=256/g" /usr/local/etc/php/php.ini && \
+    sed -i "s/;opcache.interned_strings_buffer=8/opcache.interned_strings_buffer=24/g" /usr/local/etc/php/php.ini && \
+    sed -i "s/;opcache.max_accelerated_files=10000/opcache.max_accelerated_files=100000/g" /usr/local/etc/php/php.ini && \
+    sed -i "s/opcache.validate_timestamps=1/opcache.validate_timestamps=0/g" /usr/local/etc/php/php.ini && \
     sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 604800/g" /usr/local/etc/php/php.ini && \
     mkdir -p /opt/kimai/var/logs && chmod 777 /opt/kimai/var/logs && \
     sed "s/128M/-1/g" /usr/local/etc/php/php.ini-development > /opt/kimai/php-cli.ini && \
@@ -315,4 +321,3 @@ RUN \
 ENV APP_ENV=prod
 ENV DATABASE_URL=
 ENV memory_limit=128
-USER www-data
