@@ -61,7 +61,6 @@ function handleStartup() {
     fi
   fi
 
-  sed -i -r -e 's/display_errors = Off/display_errors = On/g' /usr/local/etc/php/php.ini
 
   set +x
 
