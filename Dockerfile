@@ -312,10 +312,6 @@ RUN \
     sed -i "s/;opcache.max_accelerated_files=10000/opcache.max_accelerated_files=100000/g" /usr/local/etc/php/php.ini && \
     sed -i "s/opcache.validate_timestamps=1/opcache.validate_timestamps=0/g" /usr/local/etc/php/php.ini && \
     sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 604800/g" /usr/local/etc/php/php.ini && \
-    sed -i 's/display_errors = .*/display_errors = On/g' /usr/local/etc/php/php.ini && \
-    sed -i 's/;error_log = syslog/error_log = syslog/g' /usr/local/etc/php/php.ini && \
-    sed -i 's/display_startup_errors = Off/display_startup_errors = On/g' /usr/local/etc/php/php.ini && \
-    sed -i 's/error_reporting = .*/error_reporting = E_ALL/g' /usr/local/etc/php/php.ini && \
     mkdir -p /opt/kimai/var/logs && chmod 777 /opt/kimai/var/logs && \
     sed "s/128M/-1/g" /usr/local/etc/php/php.ini-development > /opt/kimai/php-cli.ini && \
     chown -R www-data:www-data /opt/kimai /usr/local/etc/php/php.ini && \
