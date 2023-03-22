@@ -313,10 +313,15 @@ RUN \
     sed -i "s/opcache.validate_timestamps=1/opcache.validate_timestamps=0/g" /usr/local/etc/php/php.ini && \
     sed -i "s/session.gc_maxlifetime = 1440/session.gc_maxlifetime = 604800/g" /usr/local/etc/php/php.ini && \
     sed -i 's/display_errors = .*/display_errors = On/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/;error_log = syslog/error_log = syslog/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/display_startup_errors = Off/display_startup_errors = On/g' /usr/local/etc/php/php.ini && \
+    sed -i 's/error_reporting = .*/error_reporting = E_ALL/g' /usr/local/etc/php/php.ini && \
     mkdir -p /opt/kimai/var/logs && chmod 777 /opt/kimai/var/logs && \
     sed "s/128M/-1/g" /usr/local/etc/php/php.ini-development > /opt/kimai/php-cli.ini && \
     chown -R www-data:www-data /opt/kimai /usr/local/etc/php/php.ini && \
     sed -i -e 's/;catch_workers_output = .*/catch_workers_output = yes/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i -e 's/;access.log = .*/access.log = log/$pool.access.log/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i -e 's/;access.format = .*/access.format = "%R - %u %t \"%m %r%Q%q\" %s %f %{milli}d %{kilo}M %C%%"/g' /usr/local/etc/php-fpm.d/www.conf && \
     tar -C /opt/kimai -zcvf /var/tmp/public.tgz public && \
     /opt/kimai/bin/console kimai:version | awk '{print $2}' > /opt/kimai/version.txt
 ENV APP_ENV=prod
