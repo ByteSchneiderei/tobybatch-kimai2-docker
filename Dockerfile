@@ -320,7 +320,6 @@ RUN \
     sed "s/128M/-1/g" /usr/local/etc/php/php.ini-development > /opt/kimai/php-cli.ini && \
     chown -R www-data:www-data /opt/kimai /usr/local/etc/php/php.ini && \
     sed -i -e 's/;catch_workers_output = .*/catch_workers_output = yes/g' /usr/local/etc/php-fpm.d/www.conf && \
-    sed -i -e 's/;access.log = .*/access.log = log/$pool.access.log/g' /usr/local/etc/php-fpm.d/www.conf && \
     tar -C /opt/kimai -zcvf /var/tmp/public.tgz public && \
     /opt/kimai/bin/console kimai:version | awk '{print $2}' > /opt/kimai/version.txt
 ENV APP_ENV=prod
