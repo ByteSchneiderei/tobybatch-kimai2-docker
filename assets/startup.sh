@@ -60,6 +60,9 @@ function handleStartup() {
       cp /assets/monolog.yaml /opt/kimai/config/packages/monolog.yaml
     fi
   fi
+
+  sed -i -r -e 's/display_errors = Off/display_errors = On/g' /usr/local/etc/php/php.ini
+
   set +x
 
   tar -zx -C /opt/kimai -f /var/tmp/public.tgz 
