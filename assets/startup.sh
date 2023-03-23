@@ -9,8 +9,8 @@ function config() {
   if [ -z "$memory_limit" ]; then
     memory_limit=256
   fi
-  
-  
+
+
   # Parse sql connection data
   if [ ! -z "$DATABASE_URL" ]; then
     DB_TYPE=$(awk -F '[/:@]' '{print $1}' <<< "$DATABASE_URL")
@@ -33,7 +33,6 @@ function config() {
   if ! [[ $DB_PORT =~ $re ]] ; then
      DB_PORT=3306
   fi
-
 
   echo "Wait for MySQL DB connection ..."
   until php /dbtest.php $DB_HOST $DB_BASE $DB_PORT $DB_USER $DB_PASS; do
@@ -61,8 +60,6 @@ function handleStartup() {
       cp /assets/monolog.yaml /opt/kimai/config/packages/monolog.yaml
     fi
   fi
-
-
   set +x
 
   tar -zx -C /opt/kimai -f /var/tmp/public.tgz
