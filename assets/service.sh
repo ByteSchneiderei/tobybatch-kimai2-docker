@@ -48,7 +48,7 @@ function runServer() {
   if [ -e /use_apache ]; then
     /usr/sbin/apache2ctl -D FOREGROUND
   elif [ -e /use_fpm ]; then
-    exec php-fpm 2>&1
+    exec php-fpm
   else
     echo "Error, unknown server type"
   fi
