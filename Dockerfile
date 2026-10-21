@@ -7,7 +7,7 @@
 
 # Source base [fpm/apache]
 ARG BASE="fpm"
-ARG PHP_VER="8.1"
+ARG PHP_VER="8.3"
 ARG COMPOSER_VER="latest"
 # Branch name
 ARG KIMAI="main"
